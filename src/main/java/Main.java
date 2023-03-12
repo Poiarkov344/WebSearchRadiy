@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 
-import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
@@ -52,13 +51,13 @@ public class Main {
 
         JavascriptExecutor js = (JavascriptExecutor) driver;
 
-//         search bar
+//      search bar
         WebElement searchBar = driver.findElement(By.xpath("//*[@id=\"app\"]/div[2]/section[1]/div/div/div/div/form/input"));
 
         // Filter
 
 
-//         search element
+//      search element
         searchBar.sendKeys("31210000-1");
         actions.keyDown(Keys.ENTER).keyUp(Keys.ENTER).perform();
         Thread.sleep(2500);
@@ -68,22 +67,10 @@ public class Main {
         Thread.sleep(2000);
         WebElement filter = wait_filter.until(ExpectedConditions.elementToBeClickable(By.xpath("/html[1]/body[1]/main[1]/div[2]/section[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/div[1]/div[1]/ul[1]/li[2]")));
         filter.click();
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
 
-
-
-
-////      list
-        WebElement list = driver.findElement(By.xpath("/html[1]/body[1]/main[1]/div[2]/div[1]/section[1]/div[1]/div[1]/div[1]/ul[1]"));
-        List<WebElement> listRows1 = list.findElements(By.cssSelector("a"));
-
-
-
-
-
-
-
+        //Count of pages
         WebElement NumberOfPages = driver.findElement(By.className("paginate"));
         List<WebElement> Pages = NumberOfPages.findElements(By.className("paginate__visible--desktop"));
         int pages =0;
@@ -96,7 +83,14 @@ public class Main {
             }
 
         }
+
+        //Search
         for(int i =0; i<pages; i++){
+            Thread.sleep(2000);
+            ////      list
+            WebElement list = driver.findElement(By.xpath("/html[1]/body[1]/main[1]/div[2]/div[1]/section[1]/div[1]/div[1]/div[1]/ul[1]"));
+            List<WebElement> listRows1 = list.findElements(By.cssSelector("a"));
+
 
             //function
 
