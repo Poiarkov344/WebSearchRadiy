@@ -1,3 +1,4 @@
+import graphql.org.antlr.v4.runtime.misc.Pair;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -10,7 +11,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import java.time.Duration;
+import java.util.Iterator;
 import java.util.List;
+
+import static org.openqa.selenium.io.Zip.zip;
 
 public class Main {
     public static void main(String[] args) throws  InterruptedException {
@@ -100,8 +104,8 @@ public class Main {
                 wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("body")));
                 // table 1
                 WebElement table1 = driver.findElement(By.cssSelector(".tender--customer.margin-bottom"));
-                List <WebElement> rows4 = table1.findElements(By.className("col-sm-4"));
-                for(WebElement rows : rows4){
+                List <WebElement> Table1Rows4 = table1.findElements(By.className("col-sm-4"));
+                for(WebElement rows : Table1Rows4){
                     if(rows.getText().equals("Найменування:")){
                         WebElement Data = driver.findElement(By.className("col-sm-6"));
                         System.out.println(rows.getText().trim() + " " + Data.getText());
@@ -111,11 +115,16 @@ public class Main {
                 // table2
                 try{
                     WebElement table2 = driver.findElement(By.cssSelector(".col-sm-9.tender--customer--inner.margin-bottom.margin-bottom-more"));
-                    List<WebElement> rows8 = table2.findElements(By.className("col-sm-8"));
-                    for(WebElement rows : rows8){
-                        WebElement Data = driver.findElement(By.className("date"));
-                        if(rows.getText().equals("Дата оприлюднення:")|| rows.getText().equals("Кінцевий строк подання тендерних пропозицій:") || rows.getText().equals("Очікувана вартість:")){
-                            System.out.println(rows.getText().trim() + " " + Data.getText().trim());
+                    List<WebElement> Table2Rows8 = table2.findElements(By.className("col-sm-8"));
+                    List<WebElement> Table2rows4 = table2.findElements(By.className("col-sm-4"));
+
+                    Iterator<WebElement> iter1 = Table2Rows8.iterator();
+                    Iterator<WebElement> iter2 = Table2rows4.iterator();
+                    while(iter1.hasNext() && iter2.hasNext()){
+                        WebElement element1 = iter1.next();
+                        WebElement element2 = iter2.next();
+                        if(element1.getText().equals("Дата оприлюднення:")|| element1.getText().equals("Кінцевий строк подання тендерних пропозицій:") || element1.getText().equals("Очікувана вартість:")){
+                            System.out.println(element1.getText().trim() + " " + element2.getText().trim());
                         }
                     }
                 }catch (NoSuchElementException e){
