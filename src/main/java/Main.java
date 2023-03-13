@@ -114,7 +114,7 @@ public class Main {
                     List<WebElement> rows8 = table2.findElements(By.className("col-sm-8"));
                     for(WebElement rows : rows8){
                         WebElement Data = driver.findElement(By.className("date"));
-                        if(rows.getText().equals("Дата оприлюднення:")|| rows.getText().equals("Кінцевий строк подання тендерних пропозицій:")){
+                        if(rows.getText().equals("Дата оприлюднення:")|| rows.getText().equals("Кінцевий строк подання тендерних пропозицій:") || rows.getText().equals("Очікувана вартість:")){
                             System.out.println(rows.getText().trim() + " " + Data.getText().trim());
                         }
                     }

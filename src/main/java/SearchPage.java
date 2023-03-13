@@ -13,11 +13,24 @@ public class SearchPage {
 
         XSSFSheet sheet = workbook.createSheet("Sheet1");
 
-        XSSFRow row = sheet.createRow(0);
+        int numRows = 1;
+        int numCols = 7;
+        for (int i = 0; i < numRows; i++) {
+            XSSFRow row = sheet.createRow(i);
+            for (int j = 0; j < numCols; j++) {
+                XSSFCell cell = row.createCell(j);
+                switch (j) {
+                    case 0 -> cell.setCellValue("№ п/п");
+                    case 1 -> cell.setCellValue("Назва предмету закупівлі");
+                    case 2 -> cell.setCellValue("Найменування");
+                    case 3 -> cell.setCellValue("Дата оприлюднення");
+                    case 4 -> cell.setCellValue("Кінцевий строк подання тендерних пропозицій");
+                    case 5 -> cell.setCellValue("Очікувана вартість");
+                    case 6 -> cell.setCellValue("Посилання");
+                }
+            }
+        }
 
-        XSSFCell cell = row.createCell(0);
-
-        cell.setCellValue("Hello, World!");
 
         FileOutputStream out = new FileOutputStream("output.xlsx");
 
