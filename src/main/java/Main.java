@@ -1,3 +1,7 @@
+import org.apache.poi.common.usermodel.Hyperlink;
+import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.xssf.usermodel.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -7,13 +11,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-
-
+import javax.xml.crypto.Data;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws  InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
 
 
 
@@ -84,6 +89,33 @@ public class Main {
 
         }
 
+        //Creating Excel
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+
+        XSSFSheet sheet = workbook.createSheet("Sheet1");
+
+
+        //Creating names for a table in Excel
+
+        int numRows = 0;
+        int numCols = 7;
+        for (int i = 0; i <= numRows; i++) {
+            XSSFRow row = sheet.createRow(i);
+            for (int j = 0; j < numCols; j++) {
+                XSSFCell cell = row.createCell(j);
+                switch (j) {
+                    case 0 -> cell.setCellValue("№ п/п");
+                    case 1 -> cell.setCellValue("Назва предмету закупівлі");
+                    case 2 -> cell.setCellValue("Найменування Замовника");
+                    case 3 -> cell.setCellValue("Дата оприлюднення");
+                    case 4 -> cell.setCellValue("Кінцевий строк подання тендерних пропозицій");
+                    case 5 -> cell.setCellValue("Очікувана вартість");
+                    case 6 -> cell.setCellValue("Посилання");
+                }
+            }
+        }
+
         //Search
         for(int i =0; i<pages; i++){
             Thread.sleep(2000);
@@ -95,7 +127,13 @@ public class Main {
             //function
 
             for(WebElement row : listRows1){
+                numCols =1;
+                XSSFRow ExcelRow = sheet.createRow(++numRows);
+
                 System.out.println(row.getText());
+                XSSFCell cell = ExcelRow.createCell(numCols++);
+                cell.setCellValue(row.getText());
+
                 row.click();
                 wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("body")));
                 // table 1
@@ -103,7 +141,10 @@ public class Main {
                 List <WebElement> rows4 = table1.findElements(By.className("col-sm-4"));
                 for(WebElement rows : rows4){
                     if(rows.getText().equals("Найменування:")){
+                        cell = ExcelRow.createCell(numCols++);
                         WebElement Data = driver.findElement(By.className("col-sm-6"));
+                        cell.setCellValue(Data.getText().trim());
+
                         System.out.println(rows.getText().trim() + " " + Data.getText());
                     }
                 }
@@ -114,8 +155,17 @@ public class Main {
                     List<WebElement> rows8 = table2.findElements(By.className("col-sm-8"));
                     for(WebElement rows : rows8){
                         WebElement Data = driver.findElement(By.className("date"));
-                        if(rows.getText().equals("Дата оприлюднення:")|| rows.getText().equals("Кінцевий строк подання тендерних пропозицій:") || rows.getText().equals("Очікувана вартість:")){
+                        WebElement Data4 = driver.findElement(By.className("col-sm-4"));
+                        if(rows.getText().equals("Дата оприлюднення:")|| rows.getText().equals("Кінцевий строк подання тендерних пропозицій:")){
+
+                            cell = ExcelRow.createCell(numCols++);
+                            cell.setCellValue(Data.getText().trim());
+
                             System.out.println(rows.getText().trim() + " " + Data.getText().trim());
+                        } else if (rows.getText().equals("Очікувана вартість:")) {
+
+                            cell = ExcelRow.createCell(numCols++);
+                            cell.setCellValue(Data4.getText().trim());
                         }
                     }
                 }catch (NoSuchElementException e){
@@ -124,6 +174,16 @@ public class Main {
 
 
                 String url = driver.getCurrentUrl();
+                cell = ExcelRow.createCell(numCols++);
+                cell.setCellValue(url);
+
+
+                CreationHelper createHelper = workbook.getCreationHelper();
+                Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
+                hyperlink.setAddress(url);
+                cell.setHyperlink((org.apache.poi.ss.usermodel.Hyperlink) hyperlink);
+
+
                 System.out.println(url);
 
 
@@ -136,6 +196,16 @@ public class Main {
             next.click();
 
         }
+        //Exit the web
         driver.quit();
+
+        //saving  and closing the file
+        FileOutputStream out = new FileOutputStream("output.xlsx");
+
+        workbook.write(out);
+
+        out.close();
+
+        System.out.println("Excel file created successfully.");
     }
 }
