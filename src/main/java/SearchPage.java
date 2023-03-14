@@ -6,6 +6,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 import java.io.FileOutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SearchPage {
     public static void main(String[] args) throws Exception{
@@ -31,8 +33,11 @@ public class SearchPage {
             }
         }
 
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
 
-        FileOutputStream out = new FileOutputStream("output.xlsx");
+        FileOutputStream out = new FileOutputStream(formattedDateTime +".xlsx");
 
         workbook.write(out);
 
