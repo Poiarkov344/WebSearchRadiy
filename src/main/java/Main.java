@@ -95,7 +95,7 @@ public class Main {
 
 
 
-        for(String codDK : listDK) {
+//        for(String codDK : listDK) {
 
 
             //Path to WebDriver
@@ -144,10 +144,10 @@ public class Main {
             //List of ДК codes, so we can look for several number of elements
 
 //      search element
-            searchBar.sendKeys(codDK);
-            actions.keyDown(Keys.ENTER).keyUp(Keys.ENTER).perform();
+//            searchBar.sendKeys(codDK);
+//            actions.keyDown(Keys.ENTER).keyUp(Keys.ENTER).perform();
 
-            Thread.sleep(200);
+//            Thread.sleep(200);
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("search")));
             WebElement status = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html[1]/body[1]/main[1]/div[2]/section[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/label[1]")));
@@ -197,7 +197,7 @@ public class Main {
 
                 for (WebElement row : Pages) {
                     String text = row.getText();
-                    if (text.equals("...")) {
+                    if (text.equals("...") || text.equals("")) {
 
                     } else {
                         pages = Integer.parseInt(text);
@@ -273,7 +273,7 @@ public class Main {
 
                             cell.setCellValue(count++);
                             cell = ExcelRow.createCell(numCols++);
-                            cell.setCellValue(codDK);
+                            cell.setCellValue(listDK.get(k));
                             cell = ExcelRow.createCell(numCols++);
                             cell.setCellValue(name);
 
@@ -380,7 +380,7 @@ public class Main {
                     System.out.println(e);
                 }
 
-            }
+//            }
 
 
             //quiting driver
