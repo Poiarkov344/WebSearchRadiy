@@ -188,20 +188,22 @@ public class Main {
 
 
             int pages = 0;
-            Thread.sleep(500);
+            Thread.sleep(2000);
             try {
 
                 //Count of pages
                 WebElement NumberOfPages = driver.findElement(By.className("paginate"));
                 List<WebElement> Pages = NumberOfPages.findElements(By.className("paginate__visible--desktop"));
-
+                System.out.println(Pages.size());
+                Thread.sleep(1000);
                 for (WebElement row : Pages) {
                     String text = row.getText();
-                    if (text.equals("...")) {
+                    System.out.println(row.getText());
+                    if (text.equals("...") || text.equals("")) {
 
                     } else {
                         pages = Integer.parseInt(text);
-                        System.out.println(pages);
+                        System.out.println(pages + "!23");
                     }
                 }
             }catch (NoSuchElementException e){
@@ -273,7 +275,7 @@ public class Main {
 
                             cell.setCellValue(count++);
                             cell = ExcelRow.createCell(numCols++);
-                            cell.setCellValue(codDK);
+                            cell.setCellValue(listDK.get(k));
                             cell = ExcelRow.createCell(numCols++);
                             cell.setCellValue(name);
 
