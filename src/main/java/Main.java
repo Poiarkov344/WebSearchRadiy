@@ -1,4 +1,3 @@
-import org.apache.poi.common.usermodel.Hyperlink;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -9,19 +8,14 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.interactions.Actions;
-
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-import javax.xml.crypto.Data;
+
 import java.io.*;
 
 import java.io.FileOutputStream;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,31 +24,17 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, IOException {
 
 
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Enter Код ДК: ");
-
-        ArrayList<String> listDK = new ArrayList<String>();
-
-//        String codeDK = scan.nextLine();
-//        String[] codeArray = codeDK.split("\\s+");
-//        for (String code : codeArray) {
-//            listDK.add(code);
-//        }
+        String [] KodDK ={"31700000-3", "31680000-6",
+                "31220000-4", "31210000-1" ,"31710000-6" ,
+                "38810000-6" , "31214000-9" , "32260000-3" ,
+                "31219000-4" , "31211110-2" , "31215000-6" ,
+                "32320000-2" , "31200000-8" , "38800000-3" ,
+                "38400000-9" , "42900000-5" , "31600000-2" ,
+                "32400000-7" ,"32000000-3" , "38420000-5"};
+        ArrayList<String> listDK = new ArrayList<>(Arrays.asList(KodDK));
 
 
-        boolean value =true;
-        while(value){
-            String codeDK = scan.nextLine();
-            if(codeDK.equals("q")){
-                value = false;
-            }else{
-                listDK.add(codeDK);
-            }
 
-        }
-        for(String s : listDK){
-            System.out.println(s);
-        }
 
         //Creating Excel
 
@@ -68,13 +48,7 @@ public class Main {
         int numRows = 0;
         int numCols = 8;
         int count =1;
-//
-//        for(int i =0 ; i<=numRows;++i){
-//            XSSFRow row = sheet.createRow(i);
-//            for(int j =0; j < numCols;j++){
-//                XSSFCell cell = row.createCell(j);
-//            }
-//        }
+
         for (int i = 0; i <= numRows; i++) {
              XSSFRow row = sheet.createRow(i);
             for (int j = 0; j < numCols; j++) {
@@ -112,50 +86,31 @@ public class Main {
             driver = new ChromeDriver(options);
 
 
-            //Creating actions for driver
-            Actions actions = new Actions(driver);
-
             //Opening link and setting up size of the window (full screen )
             driver.get("https://prozorro.gov.ua");
             driver.manage().window().maximize();
 
 
-            //Waiter
 
 
-            WebDriverWait wait;
-            WebDriverWait wait_filter;
-
-            wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-            wait_filter = new WebDriverWait(driver, Duration.ofSeconds(5));
-
-
-            //Scrolling
-
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-
-//      search bar
+/*
+      search bar
             WebElement searchBar = driver.findElement(By.xpath("//*[@id=\"app\"]/div[2]/section[1]/div/div/div/div/form/input"));
+ Filter
+List of ДК codes, so we can look for several number of elements
+      search element
+            searchBar.sendKeys(codDK);
+            actions.keyDown(Keys.ENTER).keyUp(Keys.ENTER).perform();
+            Thread.sleep(200);
+*/
 
-            // Filter
 
-
-
-            //List of ДК codes, so we can look for several number of elements
-
-//      search element
-//            searchBar.sendKeys(codDK);
-//            actions.keyDown(Keys.ENTER).keyUp(Keys.ENTER).perform();
-
-//            Thread.sleep(200);
-
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("search")));
-            WebElement status = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html[1]/body[1]/main[1]/div[2]/section[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/label[1]")));
+        WebElement status = driver.findElement(By.xpath("/html[1]/body[1]/main[1]/div[2]/section[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/label[1]"));
             status.click();
 
             Thread.sleep(200);
 
-            WebElement filter = wait_filter.until(ExpectedConditions.elementToBeClickable(By.xpath("/html[1]/body[1]/main[1]/div[2]/section[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/div[1]/div[1]/ul[1]/li[2]")));
+            WebElement filter = driver.findElement(By.xpath("/html[1]/body[1]/main[1]/div[2]/section[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[5]/div[1]/div[1]/div[1]/ul[1]/li[2]"));
             filter.click();
 
             Thread.sleep(200);
@@ -178,9 +133,9 @@ public class Main {
 
 //            Thread.sleep(200);
 
-            WebElement priceConferm = driver.findElement(By.xpath("//*[@id=\"app\"]/div[2]/section[1]/div/div/div/div/div/div/div[1]/div[8]/div/div/div/div/button"));
+            WebElement priceConfirm = driver.findElement(By.xpath("//*[@id=\"app\"]/div[2]/section[1]/div/div/div/div/div/div/div[1]/div[8]/div/div/div/div/button"));
 
-            priceConferm.click();
+            priceConfirm.click();
 
             Thread.sleep(600);
 
@@ -197,22 +152,19 @@ public class Main {
 
                 for (WebElement row : Pages) {
                     String text = row.getText();
-                    if (text.equals("...") || text.equals("")) {
-
-                    } else {
+                    try{
                         pages = Integer.parseInt(text);
-                        System.out.println(pages);
+                    }catch(NumberFormatException e){
+                        System.out.println(text);
                     }
                 }
             }catch (NoSuchElementException e){
                 pages=1;
-                System.out.println(pages);
             }
 
 
             Thread.sleep(100);
-            //Search every page search result
-            Page:
+            //Search every page search result PAGE
             for (int i = 0; i < pages; i++) {
 
                 Thread.sleep(2000);
@@ -314,7 +266,6 @@ public class Main {
                                 Iterator<WebElement> iter1 = Table2Rows8.iterator();
                                 Iterator<WebElement> iter2 = Table2rows4.iterator();
 
-
                                 //Checking both columns at the same time
 
                                 while (iter1.hasNext() && iter2.hasNext()) {
@@ -331,7 +282,7 @@ public class Main {
                                     }
                                 }
                             } catch (NoSuchElementException e) {
-                                System.out.println(e);
+                                System.out.println(e + "");
                             }
 
 
@@ -349,7 +300,7 @@ public class Main {
                             CreationHelper createHelper = workbook.getCreationHelper();
                             Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
                             hyperlink.setAddress(url);
-                            cell.setHyperlink((org.apache.poi.ss.usermodel.Hyperlink) hyperlink);
+                            cell.setHyperlink(hyperlink);
 
 
                             driver.navigate().back();
@@ -372,12 +323,11 @@ public class Main {
                 WebElement next = driver.findElement(By.cssSelector(".paginate__btn.next"));
                 Thread.sleep(400);
 
-//                wait1.until(ExpectedConditions.visibilityOf(next));
 
                 next.click();
 
                 }catch (NoSuchElementException e){
-                    System.out.println(e);
+                    System.out.println(e +"");
                 }
 
             }
@@ -392,14 +342,12 @@ public class Main {
 
         //getting time for the file
 
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
-        String formattedDateTime = now.format(formatter);
+        LocalTime now = LocalTime.now();
+        LocalDate today =LocalDate.now();
 
 
         //saving  and closing the file
-//        String ExcelName ="Код ДК:" + "123" + " " + formattedDateTime + ".xlsx";
-        String ExcelName = "123.xlsx";
+        String ExcelName ="Торги на _" + today + "_" + now + ".xlsx";
         FileOutputStream out = new FileOutputStream(ExcelName);
 
         workbook.write(out);
