@@ -292,7 +292,6 @@ public class Main {
                     String text = row.getText();
                     try{
                         pages = Integer.parseInt(text);
-                        pages=2;
                     }catch(NumberFormatException e){
                         System.out.println(text);
                     }
