@@ -37,8 +37,8 @@ public class Main {
 
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy",  Locale.UK);
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy",   new Locale("uk"));
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("HH_mm_ss");
         String formattedDate = today.format(formatter);
         String formattedTime = now.format(formatter1);
 
@@ -217,13 +217,13 @@ public class Main {
 
 
             //Path to Desktop on Windows
-            String desktopPath = System.getProperty("user.home") + "\\Desktop";
+//            String desktopPath = System.getProperty("user.home") + "\\Desktop";
 
 
             //Path to WebDriver
-//            System.setProperty("webdriver.chrome.driver", "/Users/yaroslavpoyarkov/Desktop/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "/Users/yaroslavpoyarkov/Desktop/chromedriver");
 
-        System.setProperty("webdriver.chrome.driver", desktopPath+ "+\\chromedriver.exe");
+//        System.setProperty("webdriver.chrome.driver", desktopPath + "\\chromedriver.exe");
 
 
             //Setting up option for WebDriver to be open remotely
@@ -492,7 +492,7 @@ public class Main {
 
         //saving  and closing the file
         String ExcelName ="Торги на _" + formattedDate + "_" + formattedTime + ".xlsx";
-        FileOutputStream out = new FileOutputStream(desktopPath+ "\\" +ExcelName);
+        FileOutputStream out = new FileOutputStream(ExcelName);
 
         workbook.write(out);
 
